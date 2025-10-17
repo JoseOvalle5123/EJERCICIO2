@@ -1,0 +1,4 @@
+agregar las ip a mongo, atlas
+crear tu servidor web estatico y relacionarlo con github
+consigurar el npm run start
+subir el repositorio a github (antes de subir crear el archivo .gitignore) ahi trae la contraseña de la base de datos
