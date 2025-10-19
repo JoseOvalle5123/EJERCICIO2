@@ -63,6 +63,16 @@ app.delete("/deleteCard/:id", async(req, res) => {
   
 })
 
+app.put("/updateCard/:id", async (req, res) => {
+  try {
+    const updatedCard = await Card.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedCard);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
+
 //Endpoint. node index.js
 app.get("/hola", (req, res) => {
   res.status(200).send("Hello world from a server!!!! :0");

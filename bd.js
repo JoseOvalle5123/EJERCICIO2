@@ -2,13 +2,13 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/novenoA";
-//Si yo no pongo un env aqui lo va a tomar como la configuración del servidor
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/novenoA";
+
 export const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
-    console.log("MongoDB Connected Succesfully!");
+    await mongoose.connect(MONGODB_URI);
+    console.log("MongoDB Connected Successfully!");
   } catch (error) {
-    console.error("Mongo DB Connection Failed");
+    console.error("MongoDB Connection Failed:", error);
   }
 };
