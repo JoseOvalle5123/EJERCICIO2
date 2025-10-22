@@ -6,7 +6,7 @@ const MONGODB_URI = process.env.MONGO_URI || "mongodb://localhost:27017/novenoA"
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGODB_URI); 
     console.log("MongoDB Connected Successfully!");
   } catch (error) {
     console.error("MongoDB Connection Failed:", error);
