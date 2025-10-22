@@ -2,78 +2,80 @@ import express from "express";
 import { connectDB } from "./bd.js";
 import { Card } from "./models/Card.js";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 
+// Conexión a la base de datos
 connectDB();
 
+//  Crear una nueva carta
 app.post("/createCard", async (req, res) => {
   try {
     const card = await Card.create(req.body);
-    //vamos a regresar la carta creada por mongo db
-    console.log(Card);
-    res.status(201).json(card).send("Card create succesfully!!");
+    res.status(201).json({ message: "Card created successfully!", card });
   } catch (error) {
-    res.status(400).send(error);
     console.error(error);
+    res.status(400).json({ error: "Error creating card", details: error.message });
   }
 });
 
-//put y pathc actualizan uno es actualización completa y otro es actualización parcial
-app.get("/getAllCards", async(req, res) => {
-    try {
+//Obtener todas las cartas
+app.get("/getAllCards", async (req, res) => {
+  try {
     const cards = await Card.find();
     res.status(200).json(cards);
-
-  } catch (error){
-    console.error(error)
-  }
-  
-})
-
-app.get("/getCard/:id", async(req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-    const cards = await Card.findById(req.params.id);
-    res.status(200).json(cards);
-
-  } catch (error){
-    res.status(400).send(error);
+  } catch (error) {
     console.error(error);
+    res.status(500).json({ error: "Error retrieving cards", details: error.message });
   }
-  
-})
+});
 
-app.delete("/deleteCard/:id", async(req, res) => {
-    try {
-      const id = parseInt(req.params.id);
-    await Card.findByIdAndDelete(req.params.id);
-    res.status(200).send("Card delete successfully")
-
-    /*if (id = null){
-      res.status(400).send(error);
-
-    }*/
-  } catch (error){
-    res.status(400).send(error);
+// Obtener una carta por ID
+app.get("/getCard/:id", async (req, res) => {
+  try {
+    const card = await Card.findById(req.params.id);
+    if (!card) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    res.status(200).json(card);
+  } catch (error) {
     console.error(error);
+    res.status(400).json({ error: "Invalid card ID", details: error.message });
   }
-  
-})
+});
 
+//Actualizar una carta por ID
 app.put("/updateCard/:id", async (req, res) => {
   try {
     const updatedCard = await Card.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200).json(updatedCard);
+    if (!updatedCard) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    res.status(200).json({ message: "Card updated successfully!", updatedCard });
   } catch (error) {
-    res.status(400).send(error);
+    console.error(error);
+    res.status(400).json({ error: "Error updating card", details: error.message });
   }
 });
 
+//Eliminar una carta por ID
+app.delete("/deleteCard/:id", async (req, res) => {
+  try {
+    const deleted = await Card.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ error: "Card not found" });
+    }
+    res.status(200).json({ message: "Card deleted successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ error: "Error deleting card", details: error.message });
+  }
+});
 
-//Endpoint. node index.js
+// Endpoints de prueba
 app.get("/hola", (req, res) => {
   res.status(200).send("Hello world from a server!!!! :0");
 });
@@ -83,16 +85,13 @@ app.get("/adios", (req, res) => {
 });
 
 app.post("/send", (req, res) => {
-  const { user, email } = req.body; //Lo estamos mandando en formato Json
-  //imaginemos que agregamos unos daros a una data base
-  console.log("Datos recibidos" + user + "" + email);
-
-  res.status(200).send("Date received succesfuly :D");
+  const { user, email } = req.body;
+  console.log("Datos recibidos:", user, email);
+  res.status(200).send("Data received successfully :D");
 });
 
-const PORT = process.env.PORT;
-console.log(PORT);
+// Inicialización del servidor
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor ejecutandose en http://localhost:${PORT}`);
+  console.log(`✅ Servidor ejecutándose en http://localhost:${PORT}`);
 });
-
