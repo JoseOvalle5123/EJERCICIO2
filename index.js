@@ -90,6 +90,28 @@ app.post("/send", (req, res) => {
   res.status(200).send("Data received successfully :D");
 });
 
+
+app.get("/review", (req, res) => {
+  const endpoints = `
+  ==== ENDPOINTS DISPONIBLES ====
+
+  1️⃣  POST   /createCard       → Crear una carta
+  2️⃣  PUT    /updateCard/:id   → Actualizar una carta
+  3️⃣  POST   /addCard          → Agregar una carta (opcional si es igual a create)
+  4️⃣  GET    /getCard/:id      → Obtener carta por ID
+  5️⃣  GET    /getAllCards      → Obtener todas las cartas
+  6️⃣  DELETE /deleteCard/:id   → Eliminar carta
+
+  📋 EXTRA:
+  7️⃣  GET    /review           → Muestra esta lista de endpoints
+  `;
+
+  res.status(200).send(endpoints);
+});
+
+
+
+
 // Inicialización del servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
