@@ -77,7 +77,7 @@ app.delete("/deleteCard/:id", async (req, res) => {
     if (!deleted) return res.status(404).json({ error: "Card not found" });
     res.status(200).json({ message: " Card deleted successfully!" });
   } catch (error) {
-    res.status(400).json({ error: " Error deleting card", details: error.message });
+    res.status(400).json({ error: " Error al eliminar la carta", details: error.message });
   }
 });
 
