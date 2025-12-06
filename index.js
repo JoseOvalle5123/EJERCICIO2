@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: "*",          // Permite cualquier dominio
-    methods: "GET,POST,PUT,DELETE",
+    methods: "GET,POST,PUT,DELETE, PATCH, OPTIONS",
     allowedHeaders: "Content-Type,Authorization",
   })
 );
