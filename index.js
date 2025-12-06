@@ -50,6 +50,19 @@ app.put("/updateCard/:id", async (req, res) => {
   }
 });
 
+app.patch("/updateCard/:id", async (req, res) => {
+  try {
+    const updatedCard = await Card.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!updatedCard) return res.status(404).json({ error: "Card not found" });
+    res.status(200).json({ message: "Card updated successfully!", updatedCard });
+  } catch (error) {
+    res.status(400).json({ error: "Error updating card", details: error.message });
+  }
+});
+
+
 // Agregar una carta
 app.post("/addCard", async (req, res) => {
   try {
